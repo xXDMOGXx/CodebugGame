@@ -37,7 +37,7 @@ public class Simulation implements Runnable {
         status = SimulationStatus.RUNNING;
         SwingUtilities.invokeLater(Window::createWindow);
 
-        communities.add(new CommunityHandler(new float[]{500.0f, 300.0f}, Creatures.createAntPops(1000, 1)));
+        communities.add(new CommunityHandler(new float[]{500.0f, 300.0f}, Creatures.createAntPops(5000, 1)));
 
         Thread update = new Thread(() -> {
             while (status == SimulationStatus.RUNNING) {
