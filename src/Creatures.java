@@ -50,9 +50,9 @@ public class Creatures {
     public static ArrayList<Ant> createAntPops(int amount, int sizeMulti) {
         ArrayList<Ant> ants = new ArrayList<>();
         float[] pivot = new float[] {11*sizeMulti, 8*sizeMulti};
-        float[][] antAnim1 = readCreatureFile("D:\\IntelliJ-IDEA\\Projects\\SimulationTests\\src\\antAnim1.txt");
-        float[][] antAnim2 = readCreatureFile("D:\\IntelliJ-IDEA\\Projects\\SimulationTests\\src\\antAnim2.txt");
-        float[][] antAnim3 = readCreatureFile("D:\\IntelliJ-IDEA\\Projects\\SimulationTests\\src\\antAnim3.txt");
+        float[][] antAnim1 = readCreatureFile("C:\\Users\\xXDMOGXx\\IdeaProjects\\SimulationTests\\src\\antAnim1.txt");
+        float[][] antAnim2 = readCreatureFile("C:\\Users\\xXDMOGXx\\IdeaProjects\\SimulationTests\\src\\antAnim2.txt");
+        float[][] antAnim3 = readCreatureFile("C:\\Users\\xXDMOGXx\\IdeaProjects\\SimulationTests\\src\\antAnim3.txt");
         float[][][] antAnims = new float[][][] {antAnim1, antAnim2, antAnim3};
         for (float[][] a : antAnims) {
             for (float[] p : a) {
