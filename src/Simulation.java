@@ -20,7 +20,7 @@ public class Simulation implements Runnable {
         status = SimulationStatus.STOPPED;
         communities = new ArrayList<>();
         initialTime = System.nanoTime();
-        float simSpeedMulti = 5f;
+        float simSpeedMulti = 1f;
         double UPS = 20d * simSpeedMulti;
         double FPS = 60d;
         timeU = 1000000000 / UPS;
@@ -37,7 +37,7 @@ public class Simulation implements Runnable {
         status = SimulationStatus.RUNNING;
         SwingUtilities.invokeLater(Window::createWindow);
 
-        communities.add(new CommunityHandler(new float[]{500.0f, 300.0f}, Creatures.createAntPops(1000, 1)));
+        communities.add(new CommunityHandler(new float[]{500.0f, 300.0f}, Creatures.createAntPops(5000, 1)));
 
         Thread update = new Thread(() -> {
             while (status == SimulationStatus.RUNNING) {
@@ -131,10 +131,5 @@ public class Simulation implements Runnable {
             running = false;
             communities.remove(this);
         }
-    }
-
-    public static void main(String[] args) {
-        Simulation simulation = new Simulation();
-        simulation.run();
     }
 }
