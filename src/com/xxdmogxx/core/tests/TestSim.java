@@ -4,6 +4,7 @@ import com.xxdmogxx.core.render.Model;
 import com.xxdmogxx.core.ILogic;
 import com.xxdmogxx.core.render.RenderManager;
 import com.xxdmogxx.core.render.WindowManager;
+import com.xxdmogxx.core.utils.Constants;
 import org.lwjgl.opengl.GL20;
 
 public class TestSim implements ILogic {
@@ -11,18 +12,17 @@ public class TestSim implements ILogic {
     private float scale = 0.01f;
     private int uniID;
     private int counter = 0;
-    private int numAnts = 1000000;
 
     private final RenderManager renderer;
     private final WindowManager window;
 
     private Model model;
-    private final float[] translations = new float[numAnts*3];
+    private final float[] translations = new float[Constants.numAnts *3];
 
     public TestSim() {
         renderer = new RenderManager();
         window = Launcher.getWindow();
-        for (int i=0; i < numAnts; i++) {
+        for (int i=0; i < Constants.numAnts; i++) {
             translations[i*3] = ((float) Math.random() * 2) - 1;
             translations[i*3+1] = ((float) Math.random() * 2) - 1;
             translations[i*3+2] = 0.0f;
@@ -43,7 +43,7 @@ public class TestSim implements ILogic {
 
     @Override
     public void update() {
-        for (int i=0; i < numAnts; i++) {
+        for (int i=0; i < Constants.numAnts; i++) {
             translations[i*3] = ((float) Math.random() * 2) - 1;
             translations[i*3+1] = ((float) Math.random() * 2) - 1;
             translations[i*3+2] = 0.0f;
