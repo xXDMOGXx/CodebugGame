@@ -7,7 +7,6 @@ uniform float scale;
 
 
 void main() {
-    gl_Position = vec4(position.x + sin(scale + (position.y/10))/500, position.y, position.z, 1.0);
-    //gl_Position = vec4(position.x, position.y, position.z, 1.0);
-    color = vec3(mod(scale, 10.0f), position.y, position.z);
+    gl_Position = vec4(position.x, position.y, position.z, 1.0);
+    color = vec3(abs(sin(scale/1000)), position.y*2, position.z);
 }
