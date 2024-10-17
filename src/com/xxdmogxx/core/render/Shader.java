@@ -40,12 +40,6 @@ public class Shader {
         // Delete the now useless Vertex and Fragment Shader objects
         if (vertexID != 0) GL20.glDetachShader(ID, vertexID);
         if (fragmentID != 0) GL20.glDetachShader(ID, fragmentID);
-
-        // Validate the shader code
-        GL20.glValidateProgram(ID);
-        // Detect if the validation process was successful
-        int code = GL20.glGetProgrami(ID, GL20.GL_VALIDATE_STATUS);
-        if (code == 0) throw new Exception("Unable to validate shader code: " + GL20.glGetProgramInfoLog(ID, 1024));
     }
 
     private static String loadFromFile(String filePath) {
