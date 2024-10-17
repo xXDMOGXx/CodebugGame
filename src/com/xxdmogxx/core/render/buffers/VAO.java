@@ -1,6 +1,5 @@
 package com.xxdmogxx.core.render.buffers;
 
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
@@ -15,12 +14,9 @@ public class VAO {
         GL30.glBindVertexArray(ID);
     }
 
-    public void linkAttribute(VBO vertexBuffer, int layout, int numComponents, int type, int stride, int offset) {
-        vertexBuffer.bind();
+    public void linkAttribute(int layout, int numComponents, int type, int stride, int offset) {
         // Configure the Vertex Attribute so that OpenGL knows how to read the VBO
         GL20.glVertexAttribPointer(layout, numComponents, type, false, stride, offset);
-        GL20.glEnableVertexAttribArray(layout);
-        vertexBuffer.unbind();
     }
 
     public void bind() {

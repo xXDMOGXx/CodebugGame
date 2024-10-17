@@ -13,6 +13,11 @@ public class Utils {
         return buffer;
     }
 
+    public static void updateDataInFloatBuffer(FloatBuffer buffer, float[] newData) {
+        buffer.clear();
+        buffer.put(newData).flip();
+    }
+
     public static IntBuffer storeDataInIntBuffer(int[] data) {
         IntBuffer buffer = MemoryUtil.memAllocInt(data.length);
         buffer.put(data).flip();

@@ -6,6 +6,7 @@ import com.xxdmogxx.core.render.buffers.VBO;
 import com.xxdmogxx.core.utils.Constants;
 import com.xxdmogxx.core.utils.Utils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL33;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,10 +19,11 @@ public class Model {
     private final Shader shader;
     private final VAO vertexArray;
     private final VBO vertexBuffer;
+    private final VBO translationBuffer;
     private final IBO indexBuffer;
     private final int indexCount;
 
-    public Model(String modelName, String shaderName) throws Exception {
+    public Model(String modelName, String shaderName, float[] translations) throws Exception {
         shader = new Shader(shaderName);
 
 
@@ -32,10 +34,14 @@ public class Model {
 
         vertexArray = new VAO();
         vertexBuffer = new VBO(vertices);
+        vertexArray.linkAttribute(0, 3, GL11.GL_FLOAT, 0, 0);
+        translationBuffer = new VBO(translations);
+        vertexArray.linkAttribute(1, 3, GL11.GL_FLOAT, 0, 0);
+        GL33.glVertexAttribDivisor(1, 1);
         indexBuffer = new IBO(indices);
-        vertexArray.linkAttribute(vertexBuffer, 0, 3, GL11.GL_FLOAT, 0, 0);
         vertexArray.unbind();
         vertexBuffer.unbind();
+        translationBuffer.unbind();
         indexBuffer.unbind();
     }
 
@@ -97,7 +103,8 @@ public class Model {
         vertexArray.unbind();
     }
 
-    public void enable() {
+    public void enable(float[] translations) {
+        translationBuffer.update(translations);
         shader.enable();
         bind();
     }
@@ -110,6 +117,7 @@ public class Model {
     public void delete() {
         vertexArray.delete();
         vertexBuffer.delete();
+        translationBuffer.delete();
         indexBuffer.delete();
         shader.delete();
     }
