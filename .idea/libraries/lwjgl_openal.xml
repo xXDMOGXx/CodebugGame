@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="lwjgl-openal">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lwjgl-release-3.3.3-custom/lwjgl-openal.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

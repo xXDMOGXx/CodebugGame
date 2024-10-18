@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="lwjgl-assimp-javadoc">
-    <CLASSES />
-    <JAVADOC>
-      <root url="jar://$PROJECT_DIR$/lwjgl-release-3.3.3-custom/lwjgl-assimp-javadoc.jar!/" />
-    </JAVADOC>
-    <SOURCES />
-  </library>
-</component>
