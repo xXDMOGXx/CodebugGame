@@ -1,4 +1,4 @@
-package com.xxdmogxx.core;
+package com.xxdmogxx.core.engine;
 
 public interface ILogic {
 

@@ -127,19 +127,6 @@ public class Creatures {
             }
             pointsChanged = true;
         }
-
-        public void calculatePoints() {
-            DataTypes.Vector[] v = vectors[currentAnim];
-            int numPoints = v.length;
-            int[] x = new int[numPoints];
-            int[] y = new int[numPoints];
-            for (int i = 0; i < numPoints; i++) {
-                double nA = v[i].d + Math.toRadians(lookDir);
-                x[i] = Math.round((float)(v[i].m * Math.cos(nA)) + position[0]);
-                y[i] = Math.round((float)(v[i].m * Math.sin(nA)) + position[1]);
-            }
-            points = new int[][] {x, y};
-        }
     }
 
     static class Ant extends BaseCreature {
@@ -168,7 +155,6 @@ public class Creatures {
                 }
                 if (pointsChanged) {
                     anim();
-                    calculatePoints();
                 }
             }
         }

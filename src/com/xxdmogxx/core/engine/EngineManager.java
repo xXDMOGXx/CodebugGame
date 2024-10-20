@@ -1,19 +1,17 @@
-package com.xxdmogxx.core;
+package com.xxdmogxx.core.engine;
 
 import com.xxdmogxx.core.render.WindowManager;
-import com.xxdmogxx.core.tests.Launcher;
+import com.xxdmogxx.core.utils.Constants;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
 import static org.lwjgl.glfw.GLFW.glfwTerminate;
 
 public class EngineManager {
-    public static final int targetFPS = 120;
-    public static final int targetUPS = 20;
     public static boolean updateReady, renderReady;
     public static double deltaTime;
-    private long timer;
 
+    private long timer;
     private boolean isRunning;
     private WindowManager window;
     private GLFWErrorCallback errorCallback;
@@ -38,8 +36,8 @@ public class EngineManager {
     public void run() {
         this.isRunning = true;
 
-        double timeU = 1000000000 / (double) targetUPS;
-        double timeF = 1000000000 / (double) targetFPS;
+        double timeU = 1000000000 / (double) Constants.UPS_TARGET;
+        double timeF = 1000000000 / (double) Constants.FPS_TARGET;
         long initialTime = System.nanoTime();
         double deltaU = 0, deltaF = 0;
         int frames = 0;

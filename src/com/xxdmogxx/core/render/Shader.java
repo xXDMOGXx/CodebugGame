@@ -11,14 +11,13 @@ public class Shader {
 
     private final int ID;
 
-    public Shader(String shaderName) throws Exception {
-        String shaderPath = Constants.DEFAULT_RESOURCE_PATH + "shaders/" + shaderName;
+    public Shader(String creatureName, String vertexShaderName, String fragmentShaderName) throws Exception {
         // Create Shader Program Object and get its reference id
         ID = GL20.glCreateProgram();
 
         // Load the vertex and fragment shaders from their files
-        String vertexCode = loadFromFile(shaderPath + ".vert");
-        String fragmentCode = loadFromFile(shaderPath + ".frag");
+        String vertexCode = loadFromFile(Constants.DEFAULT_CREATURE_PATH + creatureName + "/shaders/" + vertexShaderName + ".vert");
+        String fragmentCode = loadFromFile(Constants.DEFAULT_CREATURE_PATH + creatureName + "/shaders/" + fragmentShaderName + ".frag");
         // Create Shader Objects and get their reference id
         int vertexID = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
         int fragmentID = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);

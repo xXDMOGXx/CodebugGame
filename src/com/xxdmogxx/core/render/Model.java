@@ -6,13 +6,8 @@ import com.xxdmogxx.core.render.buffers.VBO;
 import com.xxdmogxx.core.utils.Constants;
 import com.xxdmogxx.core.utils.Utils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL33;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Scanner;
 
 public class Model {
 
@@ -20,79 +15,55 @@ public class Model {
     private final VAO vertexArray;
     private final VBO vertexBuffer;
     private final VBO translationBuffer;
+    private final VBO rotationBuffer;
+    private final VBO scaleBuffer;
+    private final VBO animationBuffer;
     private final IBO indexBuffer;
     private final int indexCount;
 
-    public Model(String modelName, String shaderName, float[] translations) throws Exception {
-        shader = new Shader(shaderName);
+    public Model(String creatureName, String modelName, String vertexShaderName, String fragmentShaderName) throws Exception {
+        shader = new Shader(creatureName, vertexShaderName, fragmentShaderName);
 
-
-        String fileName = Constants.DEFAULT_RESOURCE_PATH + "models/" + modelName + ".obj";
-        float[] vertices = readObjVertices(fileName);
-        int[] indices = readObjIndices(fileName);
+        String fileName = Constants.DEFAULT_CREATURE_PATH + creatureName + "/models/" + modelName + ".obj";
+        float[] vertices = Utils.readObjVertices(fileName);
+        int[] indices = Utils.readObjIndices(fileName);
         indexCount = indices.length;
 
         vertexArray = new VAO();
         vertexBuffer = new VBO(vertices);
+        translationBuffer = new VBO();
+        rotationBuffer = new VBO();
+        scaleBuffer = new VBO(Constants.scale);
+        animationBuffer = new VBO();
+
+        vertexBuffer.bind();
+        vertexBuffer.introduceFloatBuffer();
         vertexArray.linkAttribute(0, 3, GL11.GL_FLOAT, 0, 0);
-        translationBuffer = new VBO(translations);
-        vertexArray.linkAttribute(1, 3, GL11.GL_FLOAT, 0, 0);
+        vertexBuffer.unbind();
+
+        translationBuffer.bind();
+        vertexArray.linkAttribute(1, 2, GL11.GL_FLOAT, 0, 0);
         GL33.glVertexAttribDivisor(1, 1);
+        translationBuffer.unbind();
+
+        rotationBuffer.bind();
+        vertexArray.linkAttribute(2, 1, GL11.GL_FLOAT, 0, 0);
+        GL33.glVertexAttribDivisor(2, 1);
+        rotationBuffer.unbind();
+
+        scaleBuffer.bind();
+        scaleBuffer.introduceFloatBuffer();
+        vertexArray.linkAttribute(3, 1, GL11.GL_FLOAT, 0, 0);
+        GL33.glVertexAttribDivisor(3, Constants.numAnts);
+        scaleBuffer.unbind();
+
+        animationBuffer.bind();
+        vertexArray.linkAttribute(4, 2, GL11.GL_FLOAT, 0, 0);
+        animationBuffer.unbind();
+
         indexBuffer = new IBO(indices);
         vertexArray.unbind();
-        vertexBuffer.unbind();
-        translationBuffer.unbind();
         indexBuffer.unbind();
-    }
-
-    private static float[] readObjVertices(String filePath) {
-        File objFile = new File(filePath);
-        Scanner scanner;
-        try {
-            scanner = new Scanner(objFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return new float[] {};
-        }
-
-        ArrayList<Float> vertices = new ArrayList<>();
-        while (scanner.hasNextLine()) {
-            String data = scanner.nextLine();
-            String desc = data.substring(0, 1);
-            if (desc.equals("v")) {
-                String valueLine = data.substring(2);
-                String[] values = valueLine.split(" ");
-                vertices.add(Float.parseFloat(values[0]));
-                vertices.add(Float.parseFloat(values[1]));
-                vertices.add(Float.parseFloat(values[2]));
-            }
-        }
-        return Utils.unpackFloatArrayList(vertices);
-    }
-
-    private static int[] readObjIndices(String filePath) {
-        File objFile = new File(filePath);
-        Scanner scanner;
-        try {
-            scanner = new Scanner(objFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return new int[] {};
-        }
-
-        ArrayList<Integer> indices = new ArrayList<>();
-        while (scanner.hasNextLine()) {
-            String data = scanner.nextLine();
-            String desc = data.substring(0, 1);
-            if (desc.equals("f")) {
-                String valueLine = data.substring(2);
-                String[] values = valueLine.split(" ");
-                indices.add(Integer.parseInt(values[0]) - 1);
-                indices.add(Integer.parseInt(values[1]) - 1);
-                indices.add(Integer.parseInt(values[2]) - 1);
-            }
-        }
-        return indices.stream().filter(Objects::nonNull).mapToInt(i -> i).toArray();
     }
 
     private void bind() {
@@ -103,21 +74,61 @@ public class Model {
         vertexArray.unbind();
     }
 
-    public void enable(float[] translations) {
+    public void setBuffers(float[] translations, float[] rotations, float[] animation) {
+        translationBuffer.bind();
+        translationBuffer.set(translations);
+        translationBuffer.unbind();
+
+        rotationBuffer.bind();
+        rotationBuffer.set(rotations);
+        rotationBuffer.unbind();
+
+        animationBuffer.bind();
+        animationBuffer.set(animation);
+        animationBuffer.unbind();
+    }
+
+    public void updateBuffers(float[] translations, float[] rotations, float[] animation) {
+        translationBuffer.bind();
         translationBuffer.update(translations);
+        translationBuffer.unbind();
+
+        rotationBuffer.bind();
+        rotationBuffer.update(rotations);
+        rotationBuffer.unbind();
+
+        animationBuffer.bind();
+        animationBuffer.update(animation);
+        animationBuffer.unbind();
+    }
+
+    public void enable() {
         shader.enable();
         bind();
+        GL20.glEnableVertexAttribArray(0);
+        GL20.glEnableVertexAttribArray(1);
+        GL20.glEnableVertexAttribArray(2);
+        GL20.glEnableVertexAttribArray(3);
+        GL20.glEnableVertexAttribArray(4);
     }
 
     public void disable() {
-        shader.disable();
+        GL20.glDisableVertexAttribArray(0);
+        GL20.glDisableVertexAttribArray(1);
+        GL20.glDisableVertexAttribArray(2);
+        GL20.glDisableVertexAttribArray(3);
+        GL20.glDisableVertexAttribArray(4);
         unbind();
+        shader.disable();
     }
 
     public void delete() {
         vertexArray.delete();
         vertexBuffer.delete();
         translationBuffer.delete();
+        rotationBuffer.delete();
+        scaleBuffer.delete();
+        animationBuffer.delete();
         indexBuffer.delete();
         shader.delete();
     }

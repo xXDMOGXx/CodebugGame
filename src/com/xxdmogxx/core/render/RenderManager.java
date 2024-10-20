@@ -1,6 +1,6 @@
 package com.xxdmogxx.core.render;
 
-import com.xxdmogxx.core.tests.Launcher;
+import com.xxdmogxx.core.engine.Launcher;
 import com.xxdmogxx.core.utils.Constants;
 import org.lwjgl.opengl.GL31;
 import org.lwjgl.opengl.GL20;
@@ -15,15 +15,10 @@ public class RenderManager {
         window = Launcher.getWindow();
     }
 
-    public void render(Model model, int uniformID, float uniformValue, float[] translations) {
+    public void render(Model model) {
         clear();
-        model.enable(translations);
-        GL20.glUniform1f(uniformID, uniformValue);
-        GL20.glEnableVertexAttribArray(0);
-        GL20.glEnableVertexAttribArray(1);
+        model.enable();
         GL31.glDrawElementsInstanced(GL_TRIANGLES, model.getIndexCount(), GL_UNSIGNED_INT, 0, Constants.numAnts);
-        GL20.glDisableVertexAttribArray(0);
-        GL20.glEnableVertexAttribArray(1);
         model.disable();
     }
 
