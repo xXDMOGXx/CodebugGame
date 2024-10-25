@@ -37,7 +37,7 @@ public class TestSim implements ILogic {
     @Override
     public void init() throws Exception {
         window.setClearColor(1, 1, 1, 1);
-        model = new Model("ant", "defaultAnt", "defaultAnt", "defaultAnt");
+        model = new Model("ant", "ant", "defaultAnt", "defaultAnt");
         model.setBuffers(translations, rotations, new float[]{0.0f, 0.0f, 0.0f, 0.0f});
     }
 
