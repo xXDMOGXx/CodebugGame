@@ -74,7 +74,7 @@ public class Model {
         vertexArray.unbind();
     }
 
-    public void setBuffers(float[] translations, float[] rotations, float[] animation) {
+    public void setBuffers(float[] translations, float[] rotations) {
         translationBuffer.bind();
         translationBuffer.set(translations);
         translationBuffer.unbind();
@@ -82,13 +82,9 @@ public class Model {
         rotationBuffer.bind();
         rotationBuffer.set(rotations);
         rotationBuffer.unbind();
-
-        animationBuffer.bind();
-        animationBuffer.set(animation);
-        animationBuffer.unbind();
     }
 
-    public void updateBuffers(float[] translations, float[] rotations, float[] animation) {
+    public void updateBuffers(float[] translations, float[] rotations) {
         translationBuffer.bind();
         translationBuffer.update(translations);
         translationBuffer.unbind();
@@ -96,10 +92,6 @@ public class Model {
         rotationBuffer.bind();
         rotationBuffer.update(rotations);
         rotationBuffer.unbind();
-
-        animationBuffer.bind();
-        animationBuffer.update(animation);
-        animationBuffer.unbind();
     }
 
     public void enable() {

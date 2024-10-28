@@ -8,9 +8,11 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Utils {
+    private static final Random randomGen = new Random();
 
     public static FloatBuffer storeDataInFloatBuffer(float[] data) {
         FloatBuffer buffer = MemoryUtil.memAllocFloat(data.length);
@@ -39,6 +41,10 @@ public class Utils {
             counter++;
         }
         return floatArray;
+    }
+
+    public static int generateID() {
+        return randomGen.nextInt();
     }
 
     public static float[] readObjVertices(String filePath) {

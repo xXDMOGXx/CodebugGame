@@ -8,6 +8,6 @@ public class Constants {
     public static final int FPS_TARGET = 60;
     public static final int UPS_TARGET = 20;
     public static final String DEFAULT_CREATURE_PATH = "src/com/xxdmogxx/creatures/";
-    public static final int numAnts = 100;
-    public static final float[] scale = {0.1f};
+    public static final int numAnts = 100000;
+    public static final float[] scale = {0.05f};
 }
