@@ -15,11 +15,11 @@ public class RenderManager {
         window = Launcher.getWindow();
     }
 
-    public void render(Model model) {
+    public void render(Group group) {
         clear();
-        model.enable();
-        GL31.glDrawElementsInstanced(GL_TRIANGLES, model.getIndexCount(), GL_UNSIGNED_INT, 0, Constants.numAnts);
-        model.disable();
+        group.enable();
+        GL31.glDrawElementsInstanced(GL_TRIANGLES, group.getIndexCount(), GL_UNSIGNED_INT, 0, Constants.numAnts);
+        group.disable();
     }
 
     public void clear() {
