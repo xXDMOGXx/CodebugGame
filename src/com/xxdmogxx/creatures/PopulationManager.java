@@ -1,8 +1,7 @@
 package com.xxdmogxx.creatures;
 
-import com.xxdmogxx.core.render.Model;
+import com.xxdmogxx.core.render.Group;
 import com.xxdmogxx.core.render.RenderManager;
-import com.xxdmogxx.core.utils.Constants;
 import com.xxdmogxx.core.utils.Utils;
 
 import java.util.ArrayList;
@@ -11,19 +10,19 @@ import java.util.HashMap;
 public class PopulationManager {
     private final ArrayList<Creature> creatures;
     private final HashMap<Integer, Creature> creatureLookup;
-    private final Model model;
+    private final Group group;
 
     private final float[] translations;
     private final float[] rotations;
 
     private int index = 0;
 
-    public PopulationManager(int initialSize, HashMap<Integer, Creature> creatureLookup, Model model) {
+    public PopulationManager(int initialSize, HashMap<Integer, Creature> creatureLookup) throws Exception {
         this.creatureLookup = creatureLookup;
         creatures = new ArrayList<>();
         translations = new float[initialSize*2];
         rotations = new float[initialSize];
-        this.model = model;
+        group = new Group("ant", "ant", "defaultAnt", "defaultAnt");
         spawn(initialSize);
     }
 
@@ -40,7 +39,7 @@ public class PopulationManager {
 
             creature.setTarget((float) (Math.random() * 2 * Math.PI));
         }
-        model.setBuffers(translations, rotations);
+        group.setBuffers(translations, rotations);
     }
 
     public void update() {
@@ -50,14 +49,14 @@ public class PopulationManager {
             translations[creature.getIndex()*2+1] = creature.getPosition()[1];
             rotations[creature.getIndex()] = creature.getRotation();
         }
-        model.updateBuffers(translations, rotations);
+        group.updateBuffers(translations, rotations);
     }
 
     public void render(RenderManager renderer) {
-        //renderer.render(group);
+        renderer.render(group);
     }
 
     public void delete() {
-
+        group.delete();
     }
 }

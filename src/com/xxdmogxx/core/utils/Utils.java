@@ -14,29 +14,33 @@ import java.util.Scanner;
 public class Utils {
     private static final Random randomGen = new Random();
 
-    public static FloatBuffer storeDataInFloatBuffer(float[] data) {
+    public static FloatBuffer storeDataInBuffer(float[] data) {
         FloatBuffer buffer = MemoryUtil.memAllocFloat(data.length);
         buffer.put(data).flip();
         return buffer;
     }
 
-    public static void updateDataInFloatBuffer(FloatBuffer buffer, float[] newData) {
-        buffer.clear();
-        buffer.put(newData).flip();
-    }
-
-    public static IntBuffer storeDataInIntBuffer(int[] data) {
+    public static IntBuffer storeDataInBuffer(int[] data) {
         IntBuffer buffer = MemoryUtil.memAllocInt(data.length);
         buffer.put(data).flip();
         return buffer;
     }
 
+    public static void updateDataInBuffer(FloatBuffer buffer, float[] newData) {
+        buffer.clear();
+        buffer.put(newData).flip();
+    }
 
-    public static float[] unpackFloatArrayList(ArrayList<Float> floatArrayList) {
-        if (floatArrayList == null) return new float[] {};
-        float[] floatArray = new float[floatArrayList.size()];
+    public static void updateDataInBuffer(IntBuffer buffer, int[] newData) {
+        buffer.clear();
+        buffer.put(newData).flip();
+    }
+
+    public static float[] unpackArrayList(ArrayList<Float> arrayList) {
+        if (arrayList == null) return new float[] {};
+        float[] floatArray = new float[arrayList.size()];
         int counter = 0;
-        for (float f : floatArrayList) {
+        for (float f : arrayList) {
             floatArray[counter] = f;
             counter++;
         }
@@ -69,7 +73,7 @@ public class Utils {
                 vertices.add(Float.parseFloat(values[2]));
             }
         }
-        return unpackFloatArrayList(vertices);
+        return unpackArrayList(vertices);
     }
 
     public static int[] readObjIndices(String filePath) {
