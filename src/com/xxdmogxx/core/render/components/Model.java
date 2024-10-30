@@ -1,4 +1,4 @@
-package com.xxdmogxx.core.render;
+package com.xxdmogxx.core.render.components;
 
 import com.xxdmogxx.core.render.buffers.IBO;
 import com.xxdmogxx.core.render.buffers.VAO;
@@ -11,10 +11,9 @@ public class Model {
     private final IBO indexBuffer;
     private final int indexCount;
 
-    public Model(String creatureName, String modelName) {
-        String fileName = Constants.DEFAULT_CREATURE_PATH + creatureName + "/models/" + modelName + ".obj";
-        float[] vertices = Utils.readObjVertices(fileName, true);
-        int[] indices = Utils.readObjIndices(fileName);
+    public Model(String modelPath) {
+        float[] vertices = Utils.readObjVertices(modelPath, true);
+        int[] indices = Utils.readObjIndices(modelPath);
         indexCount = indices.length;
 
         vertexBuffer = new VBO(vertices);

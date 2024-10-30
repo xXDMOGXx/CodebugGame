@@ -1,9 +1,9 @@
 package com.xxdmogxx.core.render;
 
 import com.xxdmogxx.core.engine.Launcher;
+import com.xxdmogxx.core.render.components.Group;
 import com.xxdmogxx.core.utils.Constants;
 import org.lwjgl.opengl.GL31;
-import org.lwjgl.opengl.GL20;
 
 import static org.lwjgl.opengl.GL11.*;
 

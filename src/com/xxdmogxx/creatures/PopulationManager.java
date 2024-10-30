@@ -1,6 +1,6 @@
 package com.xxdmogxx.creatures;
 
-import com.xxdmogxx.core.render.Group;
+import com.xxdmogxx.core.render.components.Group;
 import com.xxdmogxx.core.render.RenderManager;
 import com.xxdmogxx.core.utils.Utils;
 
@@ -17,12 +17,12 @@ public class PopulationManager {
 
     private int index = 0;
 
-    public PopulationManager(int initialSize, HashMap<Integer, Creature> creatureLookup) throws Exception {
+    public PopulationManager(String creatureName, int initialSize, HashMap<String, HashMap<String, String>> creatureNameLookup, HashMap<Integer, Creature> creatureLookup) throws Exception {
         this.creatureLookup = creatureLookup;
         creatures = new ArrayList<>();
         translations = new float[initialSize*2];
         rotations = new float[initialSize];
-        group = new Group("ant", "baseAnt", "baseAnt", "baseAnt");
+        group = new Group(creatureNameLookup.get(creatureName));
         spawn(initialSize);
     }
 

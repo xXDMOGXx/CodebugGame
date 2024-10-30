@@ -1,9 +1,11 @@
-package com.xxdmogxx.core.render;
+package com.xxdmogxx.core.render.components;
 
 import com.xxdmogxx.core.render.buffers.VAO;
 import com.xxdmogxx.core.render.buffers.VBO;
 import com.xxdmogxx.core.utils.Constants;
 import org.lwjgl.opengl.GL20;
+
+import java.util.HashMap;
 
 public class Group {
 
@@ -16,11 +18,11 @@ public class Group {
 
     private final int NUM_EXTRA_ATTRIBUTES = 3;
 
-    public Group(String creatureName, String modelName, String vertexShaderName, String fragmentShaderName) throws Exception {
-        shader = new Shader(creatureName, vertexShaderName, fragmentShaderName);
+    public Group(HashMap<String, String> resourceLookup) throws Exception {
+        shader = new Shader(resourceLookup.get("defaultVertex"), resourceLookup.get("defaultFragment"));
         vertexArray = new VAO();
 
-        model = new Model(creatureName, modelName);
+        model = new Model(resourceLookup.get("defaultModel"));
         translationBuffer = new VBO();
         rotationBuffer = new VBO();
         scaleBuffer = new VBO(Constants.scale);

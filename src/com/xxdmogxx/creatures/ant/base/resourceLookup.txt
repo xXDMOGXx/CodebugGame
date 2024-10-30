@@ -1,0 +1,4 @@
+defaultModel src/com/xxdmogxx/creatures/ant/base/model/baseAnt.obj
+defaultVertex src/com/xxdmogxx/creatures/ant/base/shaders/baseAnt.vert
+defaultFragment src/com/xxdmogxx/creatures/ant/base/shaders/baseAnt.frag
+defaultStats src/com/xxdmogxx/creatures/ant/base/baseAntStats.json

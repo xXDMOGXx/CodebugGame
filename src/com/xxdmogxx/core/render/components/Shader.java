@@ -1,4 +1,4 @@
-package com.xxdmogxx.core.render;
+package com.xxdmogxx.core.render.components;
 
 import com.xxdmogxx.core.utils.Constants;
 import org.lwjgl.opengl.GL20;
@@ -11,13 +11,13 @@ public class Shader {
 
     private final int ID;
 
-    public Shader(String creatureName, String vertexShaderName, String fragmentShaderName) throws Exception {
+    public Shader(String vertexShaderPath, String fragmentShaderPath) throws Exception {
         // Create Shader Program Object and get its reference id
         ID = GL20.glCreateProgram();
 
         // Load the vertex and fragment shaders from their files
-        String vertexCode = loadFromFile(Constants.DEFAULT_CREATURE_PATH + creatureName + "/shaders/" + vertexShaderName + ".vert");
-        String fragmentCode = loadFromFile(Constants.DEFAULT_CREATURE_PATH + creatureName + "/shaders/" + fragmentShaderName + ".frag");
+        String vertexCode = loadFromFile(vertexShaderPath);
+        String fragmentCode = loadFromFile(fragmentShaderPath);
         // Create Shader Objects and get their reference id
         int vertexID = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
         int fragmentID = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);

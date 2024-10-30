@@ -6,10 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class Utils {
     private static final Random randomGen = new Random();
@@ -51,15 +48,19 @@ public class Utils {
         return randomGen.nextInt();
     }
 
-    public static float[] readObjVertices(String filePath, boolean ignoreZ) {
-        File objFile = new File(filePath);
-        Scanner scanner;
+    private static Scanner constructScanner(String filePath) {
+        File file = new File(filePath);
+        Scanner scanner = null;
         try {
-            scanner = new Scanner(objFile);
+            scanner = new Scanner(file);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            return new float[] {};
         }
+        return scanner;
+    }
+
+    public static float[] readObjVertices(String filePath, boolean ignoreZ) {
+        Scanner scanner = constructScanner(filePath);
 
         ArrayList<Float> vertices = new ArrayList<>();
         while (scanner.hasNextLine()) {
@@ -72,18 +73,12 @@ public class Utils {
                 vertices.add(Float.parseFloat(values[1]));
             }
         }
+        scanner.close();
         return unpackArrayList(vertices);
     }
 
     public static int[] readObjIndices(String filePath) {
-        File objFile = new File(filePath);
-        Scanner scanner;
-        try {
-            scanner = new Scanner(objFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return new int[] {};
-        }
+        Scanner scanner = constructScanner(filePath);
 
         ArrayList<Integer> indices = new ArrayList<>();
         while (scanner.hasNextLine()) {
@@ -97,6 +92,44 @@ public class Utils {
                 indices.add(Integer.parseInt(values[2]) - 1);
             }
         }
+        scanner.close();
         return indices.stream().filter(Objects::nonNull).mapToInt(i -> i).toArray();
+    }
+
+    public static ArrayList<String[]> readKeyValuePairs(String filePath) {
+        Scanner scanner = constructScanner(filePath);
+
+        ArrayList<String[]> pairStorage = new ArrayList<>();
+        while (scanner.hasNextLine()) {
+            String data = scanner.nextLine();
+            String[] elements = data.split(" ");
+            pairStorage.add(elements);
+        }
+        scanner.close();
+        return pairStorage;
+    }
+
+    public static HashMap<String, String> constructCreatureLookup(String filePath) {
+        Scanner scanner = constructScanner(filePath);
+
+        HashMap<String, String> lookup = new HashMap<>();
+        while (scanner.hasNextLine()) {
+            String data = scanner.nextLine();
+            String[] elements = data.split(" ");
+            lookup.put(elements[0], elements[1]);
+        }
+        scanner.close();
+        return lookup;
+    }
+
+    public static HashMap<String, HashMap<String, String>> populateNameLookup(String filePath) {
+        Scanner scanner = constructScanner(filePath);
+        HashMap<String, HashMap<String, String>> nameLookup = new HashMap<>();
+        ArrayList<String[]> namePairs = readKeyValuePairs(filePath);
+        for (String[] pair : namePairs) {
+            nameLookup.put(pair[0], constructCreatureLookup(pair[1]));
+        }
+        scanner.close();
+        return nameLookup;
     }
 }
