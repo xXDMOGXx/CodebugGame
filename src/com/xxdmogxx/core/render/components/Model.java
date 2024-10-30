@@ -3,7 +3,6 @@ package com.xxdmogxx.core.render.components;
 import com.xxdmogxx.core.render.buffers.IBO;
 import com.xxdmogxx.core.render.buffers.VAO;
 import com.xxdmogxx.core.render.buffers.VBO;
-import com.xxdmogxx.core.utils.Constants;
 import com.xxdmogxx.core.utils.Utils;
 
 public class Model {

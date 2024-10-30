@@ -9,7 +9,7 @@ out vec3 color;
 
 void main() {
     float m = length(position) * scale;
-    float d = atan(position.y, position.x) + rotation;
+    float d = atan(position.y, position.x);
     float x = m * cos(d) + translation.x;
     float y = m * sin(d) + translation.y;
     gl_Position = vec4(x, y, 0.0f, 1.0);

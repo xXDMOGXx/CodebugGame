@@ -12,13 +12,13 @@ public class Creature {
     private float size;
 
     private float moveSpeed = 0.003f;
-    private float rotateSpeed = 0.15f;
+    private float rotateSpeed = 0.3f;
 
     public Creature(int id, int index) {
         this.id = id;
         this.index = index;
         position = new float[]{0.0f, 0.0f};
-        rotation = (float) Math.random();
+        rotation = 0.0f;
         size = 0.1f;
     }
 

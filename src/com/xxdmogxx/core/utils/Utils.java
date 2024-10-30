@@ -61,7 +61,6 @@ public class Utils {
 
     public static float[] readObjVertices(String filePath, boolean ignoreZ) {
         Scanner scanner = constructScanner(filePath);
-
         ArrayList<Float> vertices = new ArrayList<>();
         while (scanner.hasNextLine()) {
             String data = scanner.nextLine();
@@ -79,7 +78,6 @@ public class Utils {
 
     public static int[] readObjIndices(String filePath) {
         Scanner scanner = constructScanner(filePath);
-
         ArrayList<Integer> indices = new ArrayList<>();
         while (scanner.hasNextLine()) {
             String data = scanner.nextLine();
@@ -98,7 +96,6 @@ public class Utils {
 
     public static ArrayList<String[]> readKeyValuePairs(String filePath) {
         Scanner scanner = constructScanner(filePath);
-
         ArrayList<String[]> pairStorage = new ArrayList<>();
         while (scanner.hasNextLine()) {
             String data = scanner.nextLine();
@@ -111,7 +108,6 @@ public class Utils {
 
     public static HashMap<String, String> constructCreatureLookup(String filePath) {
         Scanner scanner = constructScanner(filePath);
-
         HashMap<String, String> lookup = new HashMap<>();
         while (scanner.hasNextLine()) {
             String data = scanner.nextLine();

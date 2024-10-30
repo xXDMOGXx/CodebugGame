@@ -17,12 +17,13 @@ public class Group {
     private final VBO scaleBuffer;
 
     private final int NUM_EXTRA_ATTRIBUTES = 3;
+    private int size = 0;
 
     public Group(HashMap<String, String> resourceLookup) throws Exception {
         shader = new Shader(resourceLookup.get("defaultVertex"), resourceLookup.get("defaultFragment"));
         vertexArray = new VAO();
 
-        model = new Model(resourceLookup.get("defaultModel"));
+        model = new Model(resourceLookup.get("farAwayModel"));
         translationBuffer = new VBO();
         rotationBuffer = new VBO();
         scaleBuffer = new VBO(Constants.scale);
@@ -44,7 +45,8 @@ public class Group {
         vertexArray.unbind();
     }
 
-    public void setBuffers(float[] translations, float[] rotations) {
+    public void setBuffers(int newSize, float[] translations, float[] rotations) {
+        size = newSize;
         translationBuffer.set(translations);
         rotationBuffer.set(rotations);
     }
