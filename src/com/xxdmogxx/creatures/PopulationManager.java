@@ -22,7 +22,7 @@ public class PopulationManager {
         creatures = new ArrayList<>();
         translations = new float[initialSize*2];
         rotations = new float[initialSize];
-        group = new Group("ant", "ant", "defaultAnt", "defaultAnt");
+        group = new Group("ant", "baseAnt", "baseAnt", "baseAnt");
         spawn(initialSize);
     }
 
