@@ -13,7 +13,7 @@ public class Model {
 
     public Model(String creatureName, String modelName) {
         String fileName = Constants.DEFAULT_CREATURE_PATH + creatureName + "/models/" + modelName + ".obj";
-        float[] vertices = Utils.readObjVertices(fileName);
+        float[] vertices = Utils.readObjVertices(fileName, true);
         int[] indices = Utils.readObjIndices(fileName);
         indexCount = indices.length;
 
@@ -22,7 +22,7 @@ public class Model {
     }
 
     public void link(VAO vertexArray) {
-        vertexBuffer.link(vertexArray, 0, 3);
+        vertexBuffer.link(vertexArray, 0, 2);
 
         indexBuffer.bind();
         indexBuffer.introduceBuffer();

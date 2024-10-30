@@ -51,7 +51,7 @@ public class Utils {
         return randomGen.nextInt();
     }
 
-    public static float[] readObjVertices(String filePath) {
+    public static float[] readObjVertices(String filePath, boolean ignoreZ) {
         File objFile = new File(filePath);
         Scanner scanner;
         try {
@@ -70,7 +70,6 @@ public class Utils {
                 String[] values = valueLine.split(" ");
                 vertices.add(Float.parseFloat(values[0]));
                 vertices.add(Float.parseFloat(values[1]));
-                vertices.add(Float.parseFloat(values[2]));
             }
         }
         return unpackArrayList(vertices);
