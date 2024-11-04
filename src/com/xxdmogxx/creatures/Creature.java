@@ -1,7 +1,6 @@
 package com.xxdmogxx.creatures;
 
 import com.xxdmogxx.core.utils.Constants;
-import com.xxdmogxx.core.utils.Utils;
 import com.xxdmogxx.structures.Wall;
 
 import java.util.ArrayList;
@@ -55,8 +54,14 @@ public class Creature {
 
     }
 
-    public void lookAt(float rotation) {
-        targetRotation = (float) (rotation - Math.PI/2);
+    public void lookAt(float newRotation) {
+        if (newRotation < 0) newRotation += Constants.FLOAT_TAU;
+        else if (newRotation >= Constants.FLOAT_TAU) newRotation -= Constants.FLOAT_TAU;
+        targetRotation = (float) (newRotation - Math.PI/2);
+    }
+
+    public void snapRotationToTarget() {
+        rotation = targetRotation;
     }
 
     public void setVelocity(float x, float y) {
@@ -83,8 +88,6 @@ public class Creature {
     private void checkCollisions(ArrayList<Wall> obstacles) {
         if ((position[0] >= 1 || position[0] <= -1) || (position[1] >= 1 || position[1] <= -1)) {
             float newDir = (float) Math.atan2(-position[1], -position[0]);
-            if (newDir < 0) newDir += Constants.FLOAT_TAU;
-            else if (newDir >= Constants.FLOAT_TAU) newDir -= Constants.FLOAT_TAU;
             setTarget(newDir);
             recentlyCollided = true;
         } else {

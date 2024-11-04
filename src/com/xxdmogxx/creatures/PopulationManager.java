@@ -39,6 +39,7 @@ public class PopulationManager {
             index++;
 
             creature.setTarget((float) (Math.random() * 2 * Math.PI));
+            creature.snapRotationToTarget();
         }
         group.setBuffers(amount, translations, rotations);
     }
