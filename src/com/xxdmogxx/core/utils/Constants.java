@@ -7,6 +7,8 @@ public class Constants {
     public static final boolean VSYNC = false;
     public static final int FPS_TARGET = 60;
     public static final int UPS_TARGET = 20;
-    public static final int numAnts = 500000;
-    public static final float[] scale = {0.01f};
+    public static final int numAnts = 100000;
+    public static final float[] scale = {0.05f};
+    public static final float FLOAT_PI = (float) Math.PI;
+    public static final float FLOAT_TAU = (float) Math.TAU;
 }

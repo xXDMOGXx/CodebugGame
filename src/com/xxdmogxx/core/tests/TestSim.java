@@ -8,7 +8,9 @@ import com.xxdmogxx.core.utils.Constants;
 import com.xxdmogxx.core.utils.Utils;
 import com.xxdmogxx.creatures.Creature;
 import com.xxdmogxx.creatures.PopulationManager;
+import com.xxdmogxx.structures.Wall;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TestSim implements ILogic {
@@ -16,6 +18,7 @@ public class TestSim implements ILogic {
     private final RenderManager renderer;
     private final WindowManager window;
     private PopulationManager popManager;
+    private final ArrayList<Wall> obstacles;
 
     private final HashMap<String, HashMap<String, String>> creatureNameLookup;
     private final HashMap<Integer, Creature> creatureLookup;
@@ -25,6 +28,10 @@ public class TestSim implements ILogic {
         window = Launcher.getWindow();
         creatureNameLookup = Utils.populateNameLookup("src/com/xxdmogxx/creatures/nameLookup.txt");
         creatureLookup = new HashMap<>();
+        obstacles = new ArrayList<>();
+        obstacles.add(new Wall(0.2f, -0.3f, 0.1f, 0.3f));
+        obstacles.add(new Wall(0.1f, 0.2f, -0.6f, 0.3f));
+        obstacles.add(new Wall(-0.3f, 0.0f, -0.6f, 0.1f));
     }
 
     @Override
@@ -39,7 +46,7 @@ public class TestSim implements ILogic {
 
     @Override
     public void update() {
-        popManager.update();
+        popManager.update(obstacles);
     }
 
     @Override

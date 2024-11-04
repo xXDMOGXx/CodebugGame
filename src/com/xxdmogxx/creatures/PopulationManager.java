@@ -3,6 +3,7 @@ package com.xxdmogxx.creatures;
 import com.xxdmogxx.core.render.components.Group;
 import com.xxdmogxx.core.render.RenderManager;
 import com.xxdmogxx.core.utils.Utils;
+import com.xxdmogxx.structures.Wall;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,9 +43,9 @@ public class PopulationManager {
         group.setBuffers(amount, translations, rotations);
     }
 
-    public void update() {
+    public void update(ArrayList<Wall> obstacles) {
         for (Creature creature : creatures) {
-            creature.update();
+            creature.update(obstacles);
             translations[creature.getIndex()*2] = creature.getPosition()[0];
             translations[creature.getIndex()*2+1] = creature.getPosition()[1];
             rotations[creature.getIndex()] = creature.getRotation();
