@@ -1,0 +1,1 @@
+walk src/com/xxdmogxx/creatures/ant/base/animations/walk/animData.txt

@@ -94,6 +94,23 @@ public class Utils {
         return indices.stream().filter(Objects::nonNull).mapToInt(i -> i).toArray();
     }
 
+    public static float[] readAnimFiles(String dataPath) {
+        Scanner scanner = constructScanner(dataPath);
+        ArrayList<Float> vertices = new ArrayList<>();
+        while (scanner.hasNextLine()) {
+            String data = scanner.nextLine();
+            String desc = data.substring(0, 1);
+            if (desc.equals("v")) {
+                String valueLine = data.substring(2);
+                String[] values = valueLine.split(" ");
+                vertices.add(Float.parseFloat(values[0]));
+                vertices.add(Float.parseFloat(values[1]));
+            }
+        }
+        scanner.close();
+        return unpackArrayList(vertices);
+    }
+
     public static ArrayList<String[]> readKeyValuePairs(String filePath) {
         Scanner scanner = constructScanner(filePath);
         ArrayList<String[]> pairStorage = new ArrayList<>();
@@ -104,6 +121,17 @@ public class Utils {
         }
         scanner.close();
         return pairStorage;
+    }
+
+    public static HashMap<String, Integer> populateDataLookup(String filePath) {
+        Scanner scanner = constructScanner(filePath);
+        HashMap<String, Integer> dataLookup = new HashMap<>();
+        ArrayList<String[]> namePairs = readKeyValuePairs(filePath);
+        for (String[] pair : namePairs) {
+            dataLookup.put(pair[0], Integer.parseInt(pair[1]));
+        }
+        scanner.close();
+        return dataLookup;
     }
 
     public static HashMap<String, String> constructCreatureLookup(String filePath) {

@@ -10,9 +10,9 @@ public class Model {
     private final IBO indexBuffer;
     private final int indexCount;
 
-    public Model(String modelPath) {
-        float[] vertices = Utils.readObjVertices(modelPath, true);
-        int[] indices = Utils.readObjIndices(modelPath);
+    public Model(String animPath) {
+        float[] vertices = Utils.readObjVertices(animPath, true);
+        int[] indices = Utils.readObjIndices(animPath);
         indexCount = indices.length;
 
         vertexBuffer = new VBO(vertices);

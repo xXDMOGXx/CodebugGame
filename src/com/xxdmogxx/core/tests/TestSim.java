@@ -26,12 +26,12 @@ public class TestSim implements ILogic {
     public TestSim() {
         renderer = new RenderManager();
         window = Launcher.getWindow();
-        creatureNameLookup = Utils.populateNameLookup("src/com/xxdmogxx/creatures/nameLookup.txt");
+        creatureNameLookup = Utils.populateNameLookup("src/com/xxdmogxx/creatures/creatureNameLookup.txt");
         creatureLookup = new HashMap<>();
         obstacles = new ArrayList<>();
-        obstacles.add(new Wall(0.2f, -0.3f, 0.1f, 0.3f));
-        obstacles.add(new Wall(0.1f, 0.2f, -0.6f, 0.3f));
-        obstacles.add(new Wall(-0.3f, 0.0f, -0.6f, 0.1f));
+        obstacles.add(new Wall(0.4f, 0.2f, 0.2f, 0.3f));
+        obstacles.add(new Wall(0.1f, 0.2f, -0.1f, 0.3f));
+        obstacles.add(new Wall(-0.2f, 0.2f, -0.4f, 0.3f));
     }
 
     @Override

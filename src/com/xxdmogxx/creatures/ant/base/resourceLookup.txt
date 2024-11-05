@@ -1,6 +1,8 @@
-defaultModel src/com/xxdmogxx/creatures/ant/base/model/baseAnt.obj
-simplifiedModel src/com/xxdmogxx/creatures/ant/base/model/simplifiedBaseAnt.obj
-farAwayModel src/com/xxdmogxx/creatures/ant/base/model/reallyFuckinFarAwayBaseAnt.obj
+defaultModel src/com/xxdmogxx/creatures/ant/base/model/base/baseAnt.obj
+simplifiedModel src/com/xxdmogxx/creatures/ant/base/model/simplified/simplifiedBaseAnt.obj
+farAwayModel src/com/xxdmogxx/creatures/ant/base/model/reallyFuckinFarAway/reallyFuckinFarAwayBaseAnt.obj
 defaultVertex src/com/xxdmogxx/creatures/ant/base/shaders/baseAnt.vert
 defaultFragment src/com/xxdmogxx/creatures/ant/base/shaders/baseAnt.frag
 defaultStats src/com/xxdmogxx/creatures/ant/base/baseAntStats.json
+
+animations src/com/xxdmogxx/creatures/ant/base/animations/animNameLookup.txt
