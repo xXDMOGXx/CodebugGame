@@ -6,21 +6,22 @@ import com.xxdmogxx.core.render.buffers.VBO;
 import com.xxdmogxx.core.utils.Utils;
 
 public class Model {
-    private final VBO vertexBuffer;
+    private final VBO startVertexBuffer;
+    private final VBO endVertexBuffer;
     private final IBO indexBuffer;
     private final int indexCount;
 
-    public Model(String animPath) {
-        float[] vertices = Utils.readObjVertices(animPath, true);
-        int[] indices = Utils.readObjIndices(animPath);
-        indexCount = indices.length;
+    public Model(AnimationHolder holder, int startKeyframeIndex, int endKeyframeIndex) {
+        indexCount = holder.indices.length;
 
-        vertexBuffer = new VBO(vertices);
-        indexBuffer = new IBO(indices);
+        startVertexBuffer = new VBO(holder.vertices[startKeyframeIndex]);
+        endVertexBuffer = new VBO(holder.vertices[endKeyframeIndex]);
+        indexBuffer = new IBO(holder.indices);
     }
 
     public void link(VAO vertexArray) {
-        vertexBuffer.link(vertexArray, 0, 2);
+        startVertexBuffer.link(vertexArray, 0, 3);
+        endVertexBuffer.link(vertexArray, 1, 3);
 
         indexBuffer.bind();
         indexBuffer.introduceBuffer();
@@ -31,7 +32,8 @@ public class Model {
     }
 
     public void delete() {
-        vertexBuffer.delete();
+        startVertexBuffer.delete();
+        endVertexBuffer.delete();
         indexBuffer.delete();
     }
 

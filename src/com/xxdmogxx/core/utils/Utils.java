@@ -70,6 +70,7 @@ public class Utils {
                 String[] values = valueLine.split(" ");
                 vertices.add(Float.parseFloat(values[0]));
                 vertices.add(Float.parseFloat(values[1]));
+                if (!ignoreZ) { vertices.add(Float.parseFloat(values[2])); }
             }
         }
         scanner.close();
@@ -94,21 +95,27 @@ public class Utils {
         return indices.stream().filter(Objects::nonNull).mapToInt(i -> i).toArray();
     }
 
-    public static float[] readAnimFiles(String dataPath) {
-        Scanner scanner = constructScanner(dataPath);
-        ArrayList<Float> vertices = new ArrayList<>();
-        while (scanner.hasNextLine()) {
-            String data = scanner.nextLine();
-            String desc = data.substring(0, 1);
-            if (desc.equals("v")) {
-                String valueLine = data.substring(2);
-                String[] values = valueLine.split(" ");
-                vertices.add(Float.parseFloat(values[0]));
-                vertices.add(Float.parseFloat(values[1]));
+    public static float[][] readAnimFiles(String dataPath, HashMap<String, Integer> dataLookup) {
+        float[][] keyframes = new float[dataLookup.get("numKeyframes")][dataLookup.get("numVertices")*3];
+        for (int i = 0; i < dataLookup.get("numKeyframes"); i++) {
+            String keyframePath = dataPath + i + ".obj";
+            Scanner scanner = constructScanner(keyframePath);
+            ArrayList<Float> vertices = new ArrayList<>();
+            while (scanner.hasNextLine()) {
+                String data = scanner.nextLine();
+                String desc = data.substring(0, 1);
+                if (desc.equals("v")) {
+                    String valueLine = data.substring(2);
+                    String[] values = valueLine.split(" ");
+                    vertices.add(Float.parseFloat(values[0]));
+                    vertices.add(Float.parseFloat(values[1]));
+                    vertices.add(Float.parseFloat(values[2]));
+                }
             }
+            scanner.close();
+            keyframes[i] = unpackArrayList(vertices);
         }
-        scanner.close();
-        return unpackArrayList(vertices);
+        return keyframes;
     }
 
     public static ArrayList<String[]> readKeyValuePairs(String filePath) {
@@ -128,7 +135,9 @@ public class Utils {
         HashMap<String, Integer> dataLookup = new HashMap<>();
         ArrayList<String[]> namePairs = readKeyValuePairs(filePath);
         for (String[] pair : namePairs) {
-            dataLookup.put(pair[0], Integer.parseInt(pair[1]));
+            if (!Objects.equals(pair[0], "")) {
+                dataLookup.put(pair[0], Integer.parseInt(pair[1]));
+            }
         }
         scanner.close();
         return dataLookup;

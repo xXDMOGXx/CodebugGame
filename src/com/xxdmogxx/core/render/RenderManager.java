@@ -2,7 +2,6 @@ package com.xxdmogxx.core.render;
 
 import com.xxdmogxx.core.engine.Launcher;
 import com.xxdmogxx.core.render.components.Group;
-import com.xxdmogxx.core.utils.Constants;
 import org.lwjgl.opengl.GL31;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -15,10 +14,13 @@ public class RenderManager {
         window = Launcher.getWindow();
     }
 
-    public void render(Group group) {
+    public void prepareRender() {
         clear();
+    }
+
+    public void render(Group group) {
         group.enable();
-        GL31.glDrawElementsInstanced(GL_TRIANGLES, group.getIndexCount(), GL_UNSIGNED_INT, 0, Constants.numAnts);
+        GL31.glDrawElementsInstanced(GL_TRIANGLES, group.getIndexCount(), GL_UNSIGNED_INT, 0, group.getBufferSize());
         group.disable();
     }
 

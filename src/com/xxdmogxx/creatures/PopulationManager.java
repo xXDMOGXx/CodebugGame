@@ -1,7 +1,7 @@
 package com.xxdmogxx.creatures;
 
-import com.xxdmogxx.core.render.components.Group;
 import com.xxdmogxx.core.render.RenderManager;
+import com.xxdmogxx.core.render.components.AnimationHandler;
 import com.xxdmogxx.core.utils.Utils;
 import com.xxdmogxx.structures.Wall;
 
@@ -9,21 +9,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PopulationManager {
-    private final ArrayList<Creature> creatures;
-    private final HashMap<Integer, Creature> creatureLookup;
-    private final Group group;
 
-    private final float[] translations;
-    private final float[] rotations;
+    public final ArrayList<Creature> creatures;
+    private final HashMap<Integer, Creature> creatureLookup;
+    private final AnimationHandler animHandler;
 
     private int index = 0;
 
     public PopulationManager(String creatureName, int initialSize, HashMap<String, HashMap<String, String>> creatureNameLookup, HashMap<Integer, Creature> creatureLookup) throws Exception {
         this.creatureLookup = creatureLookup;
         creatures = new ArrayList<>();
-        translations = new float[initialSize*2];
-        rotations = new float[initialSize];
-        group = new Group(creatureNameLookup.get(creatureName));
+        animHandler = new AnimationHandler(this, Utils.readKeyValuePairs(creatureNameLookup.get(creatureName).get("animations")));
+
         spawn(initialSize);
     }
 
@@ -33,32 +30,32 @@ public class PopulationManager {
             Creature creature = new Creature(id, index);
             creatures.add(creature);
             creatureLookup.put(id, creature);
-            translations[index*2] = creature.getPosition()[0];
-            translations[index*2+1] = creature.getPosition()[1];
-            rotations[index] = creature.getRotation();
-            index++;
 
             creature.setTarget((float) (Math.random() * 2 * Math.PI));
             creature.snapRotationToTarget();
+            creature.timingCounter = (int) (Math.random() * 10);
+            creature.frameCounter = (int) Math.round(Math.random());
+
+            animHandler.addCreature(creature);
+
+            index++;
         }
-        group.setBuffers(amount, translations, rotations);
+        animHandler.setBuffers();
     }
 
     public void update(ArrayList<Wall> obstacles) {
-        for (Creature creature : creatures) {
-            creature.update(obstacles);
-            translations[creature.getIndex()*2] = creature.getPosition()[0];
-            translations[creature.getIndex()*2+1] = creature.getPosition()[1];
-            rotations[creature.getIndex()] = creature.getRotation();
-        }
-        group.updateBuffers(translations, rotations);
+        for (Creature creature : creatures) { creature.update(obstacles); }
+        animHandler.advanceAnims();
+        animHandler.updateTransformations();
+        animHandler.updateBuffers();
     }
 
     public void render(RenderManager renderer) {
-        renderer.render(group);
+        renderer.prepareRender();
+        animHandler.render(renderer);
     }
 
     public void delete() {
-        group.delete();
+        animHandler.delete();
     }
 }

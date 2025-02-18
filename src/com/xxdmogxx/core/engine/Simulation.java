@@ -1,7 +1,5 @@
-package com.xxdmogxx.core.tests;
+package com.xxdmogxx.core.engine;
 
-import com.xxdmogxx.core.engine.Launcher;
-import com.xxdmogxx.core.engine.ILogic;
 import com.xxdmogxx.core.render.RenderManager;
 import com.xxdmogxx.core.render.WindowManager;
 import com.xxdmogxx.core.utils.Constants;
@@ -13,7 +11,7 @@ import com.xxdmogxx.structures.Wall;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TestSim implements ILogic {
+public class Simulation {
 
     private final RenderManager renderer;
     private final WindowManager window;
@@ -23,7 +21,7 @@ public class TestSim implements ILogic {
     private final HashMap<String, HashMap<String, String>> creatureNameLookup;
     private final HashMap<Integer, Creature> creatureLookup;
 
-    public TestSim() {
+    public Simulation() {
         renderer = new RenderManager();
         window = Launcher.getWindow();
         creatureNameLookup = Utils.populateNameLookup("src/com/xxdmogxx/creatures/creatureNameLookup.txt");
@@ -34,27 +32,22 @@ public class TestSim implements ILogic {
         obstacles.add(new Wall(-0.2f, 0.2f, -0.4f, 0.3f));
     }
 
-    @Override
     public void init() throws Exception {
         window.setClearColor(1, 1, 1, 1);
         popManager = new PopulationManager("baseAnt", Constants.numAnts, creatureNameLookup, creatureLookup);
     }
 
-    @Override
     public void input() {
     }
 
-    @Override
     public void update() {
         popManager.update(obstacles);
     }
 
-    @Override
     public void render() {
         popManager.render(renderer);
     }
 
-    @Override
     public void cleanup() {
         popManager.delete();
     }

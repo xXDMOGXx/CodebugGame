@@ -15,14 +15,14 @@ public class EngineManager {
     private boolean isRunning;
     private WindowManager window;
     private GLFWErrorCallback errorCallback;
-    private ILogic gameLogic;
+    private Simulation sim;
 
     private void init() throws Exception {
         GLFW.glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint(System.err).set());
         window = Launcher.getWindow();
-        gameLogic = Launcher.getGame();
+        sim = Launcher.getSim();
         window.init();
-        gameLogic.init();
+        sim.init();
         timer = System.currentTimeMillis();
         updateReady = false;
         renderReady = false;
@@ -84,23 +84,23 @@ public class EngineManager {
     }
 
     private void input() {
-        gameLogic.input();
+        sim.input();
     }
 
     private void render() {
-        gameLogic.render();
+        sim.render();
         window.update();
         renderReady = false;
     }
 
     private void update() {
-        gameLogic.update();
+        sim.update();
         updateReady = false;
     }
 
     private void cleanup() {
         window.cleanup();
-        gameLogic.cleanup();
+        sim.cleanup();
         errorCallback.free();
         // Terminate GLFW before ending the program
         glfwTerminate();

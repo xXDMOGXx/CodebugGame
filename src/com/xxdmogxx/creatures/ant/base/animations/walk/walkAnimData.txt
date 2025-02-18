@@ -1,0 +1,5 @@
+numVertices 120
+numKeyframes 2
+
+keyframeTiming0 10
+keyframeTiming1 10

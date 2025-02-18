@@ -1,19 +1,18 @@
 package com.xxdmogxx.core.engine;
 
 import com.xxdmogxx.core.render.WindowManager;
-import com.xxdmogxx.core.tests.TestSim;
 import com.xxdmogxx.core.utils.Constants;
 
 public class Launcher {
 
     private static WindowManager window;
-    private static TestSim game;
+    private static Simulation sim;
 
     public static void main(String[] args) {
         // Creates the window
         window = new WindowManager(Constants.TITLE, Constants.WIDTH, Constants.HEIGHT, Constants.VSYNC);
         // Creates the main game file
-        game = new TestSim();
+        sim = new Simulation();
         // Creates the engine that runs the game framework
         EngineManager engine = new EngineManager();
         // Try to start the engine
@@ -28,7 +27,7 @@ public class Launcher {
         return window;
     }
 
-    public static TestSim getGame() {
-        return game;
+    public static Simulation getSim() {
+        return sim;
     }
 }

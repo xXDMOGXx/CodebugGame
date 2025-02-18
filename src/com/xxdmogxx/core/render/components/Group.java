@@ -1,37 +1,56 @@
 package com.xxdmogxx.core.render.components;
 
+import com.xxdmogxx.core.render.buffers.IBO;
 import com.xxdmogxx.core.render.buffers.VAO;
 import com.xxdmogxx.core.render.buffers.VBO;
 import com.xxdmogxx.core.utils.Constants;
+import com.xxdmogxx.creatures.Creature;
 import org.lwjgl.opengl.GL20;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class Group {
+
+    public float[] translations;
+    public float[] rotations;
+    public float[] tweens;
+    public final ArrayList<Creature> creatures;
 
     private final Shader shader;
     private final Model model;
     private final VAO vertexArray;
     private final VBO translationBuffer;
     private final VBO rotationBuffer;
+    private final VBO tweenBuffer;
+    private final VBO maxTweenBuffer;
     private final VBO scaleBuffer;
 
-    private final int NUM_EXTRA_ATTRIBUTES = 3;
-    private int size = 0;
+    private int bufferSize = 0;
 
-    public Group(HashMap<String, String> resourceLookup) throws Exception {
-        shader = new Shader(resourceLookup.get("defaultVertex"), resourceLookup.get("defaultFragment"));
+    private final int NUM_EXTRA_ATTRIBUTES = 6;
+
+    public Group(AnimationHolder holder, int startKeyframeIndex, int endKeyframeIndex, int maxTiming) throws Exception {
+        translations = new float[0];
+        rotations = new float[0];
+        tweens = new float[0];
+        creatures = new ArrayList<>();
+
+        shader = new Shader(Constants.DEFAULT_ANIM_VERT_SHADER, Constants.DEFAULT_FRAG_SHADER);
         vertexArray = new VAO();
 
-        model = new Model(resourceLookup.get("farAwayModel"));
+        model = new Model(holder, startKeyframeIndex, endKeyframeIndex);
         translationBuffer = new VBO();
         rotationBuffer = new VBO();
+        tweenBuffer = new VBO();
+        maxTweenBuffer = new VBO(new float[]{maxTiming});
         scaleBuffer = new VBO(Constants.scale);
 
         model.link(vertexArray);
-        translationBuffer.link(vertexArray, 1, 2, 1);
-        rotationBuffer.link(vertexArray, 2, 1, 1);
-        scaleBuffer.link(vertexArray, 3, 1, Constants.numAnts);
+        translationBuffer.link(vertexArray, 2, 2, 1);
+        rotationBuffer.link(vertexArray, 3, 1, 1);
+        tweenBuffer.link(vertexArray, 4, 1, 1);
+        maxTweenBuffer.link(vertexArray, 5, 1, bufferSize);
+        scaleBuffer.link(vertexArray, 6, 1, bufferSize);
 
         vertexArray.unbind();
         model.unlink();
@@ -45,15 +64,41 @@ public class Group {
         vertexArray.unbind();
     }
 
-    public void setBuffers(int newSize, float[] translations, float[] rotations) {
-        size = newSize;
-        translationBuffer.set(translations);
-        rotationBuffer.set(rotations);
+    public void updateArrays() {
+        if (tweens.length != creatures.size()) {
+            translations = new float[creatures.size()*2];
+            rotations = new float[creatures.size()];
+            tweens = new float[creatures.size()];
+        }
+        for (int i = 0; i < creatures.size(); i++) {
+            translations[i*2] = creatures.get(i).position[0];
+            translations[i*2+1] = creatures.get(i).position[1];
+            rotations[i] = creatures.get(i).rotation;
+            tweens[i] = creatures.get(i).timingCounter;
+        }
     }
 
-    public void updateBuffers(float[] translations, float[] rotations) {
-        translationBuffer.update(translations);
-        rotationBuffer.update(rotations);
+    public void setBuffers() {
+        translationBuffer.set(translations);
+        rotationBuffer.set(rotations);
+        tweenBuffer.set(tweens);
+    }
+
+    public void updateBuffers() {
+        if (bufferSize == creatures.size()) {
+            translationBuffer.update(translations);
+            rotationBuffer.update(rotations);
+            tweenBuffer.update(tweens);
+        } else {
+            translationBuffer.set(translations);
+            rotationBuffer.set(rotations);
+            tweenBuffer.set(tweens);
+            bufferSize = creatures.size();
+            bind();
+            maxTweenBuffer.link(vertexArray, 5, 1, bufferSize);
+            scaleBuffer.link(vertexArray, 6, 1, bufferSize);
+            unbind();
+        }
     }
 
     private void enableAttributes() {
@@ -85,15 +130,17 @@ public class Group {
         model.delete();
         translationBuffer.delete();
         rotationBuffer.delete();
+        tweenBuffer.delete();
+        maxTweenBuffer.delete();
         scaleBuffer.delete();
         shader.delete();
     }
 
-    public int getId() {
-        return vertexArray.getID();
-    }
-
     public int getIndexCount() {
         return model.getIndexCount();
+    }
+
+    public int getBufferSize() {
+        return bufferSize;
     }
 }

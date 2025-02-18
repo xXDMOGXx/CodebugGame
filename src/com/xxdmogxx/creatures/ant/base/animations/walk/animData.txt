@@ -1,3 +1,0 @@
-numVertices 120
-numAnims 2
-animTiming 30 30

@@ -41,7 +41,6 @@ public class VBO {
         // Update the data in the existing float buffer
         Utils.updateDataInBuffer(buffer, data);
         introduceBuffer();
-        size = data.length;
         unbind();
     }
 
@@ -85,5 +84,9 @@ public class VBO {
 
     public int getID() {
         return ID;
+    }
+
+    public int getSize() {
+        return size;
     }
 }

@@ -1,5 +1,6 @@
 package com.xxdmogxx.creatures;
 
+import com.xxdmogxx.core.render.components.Group;
 import com.xxdmogxx.core.utils.Constants;
 import com.xxdmogxx.structures.Wall;
 
@@ -8,9 +9,9 @@ import java.util.ArrayList;
 public class Creature {
     private int id;
     private int index;
-    private final float[] position;
+    public final float[] position;
     private final float[] velocity = new float[]{0.0f, 0.0f};
-    private float rotation;
+    public float rotation;
     private float targetRotation;
     private float size;
 
@@ -18,6 +19,11 @@ public class Creature {
     private float rotateSpeed = 0.3f;
 
     private boolean recentlyCollided = false;
+
+    public String anim;
+    public Group group;
+    public int frameCounter = 0;
+    public int timingCounter = 0;
 
     public Creature(int id, int index) {
         this.id = id;
@@ -41,6 +47,11 @@ public class Creature {
         this.position = position;
         this.rotation = rotation;
         this.size = size;
+    }
+
+    public void setAnimation(String animationName) {
+        anim = animationName;
+        frameCounter = 0;
     }
 
     public void setTarget(float direction) {
@@ -115,13 +126,5 @@ public class Creature {
 
     public int getIndex() {
         return index;
-    }
-
-    public float[] getPosition() {
-        return position;
-    }
-
-    public float getRotation() {
-        return rotation;
     }
 }
