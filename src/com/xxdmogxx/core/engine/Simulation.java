@@ -1,7 +1,8 @@
 package com.xxdmogxx.core.engine;
 
+import com.xxdmogxx.core.render.Camera;
 import com.xxdmogxx.core.render.RenderManager;
-import com.xxdmogxx.core.render.WindowManager;
+import com.xxdmogxx.core.render.Window;
 import com.xxdmogxx.core.utils.Constants;
 import com.xxdmogxx.core.utils.Utils;
 import com.xxdmogxx.creatures.Creature;
@@ -14,9 +15,10 @@ import java.util.HashMap;
 public class Simulation {
 
     private final RenderManager renderer;
-    private final WindowManager window;
+    private final Window window;
     private PopulationManager popManager;
     private final ArrayList<Wall> obstacles;
+    public final Camera camera;
 
     private final HashMap<String, HashMap<String, String>> creatureNameLookup;
     private final HashMap<Integer, Creature> creatureLookup;
@@ -27,9 +29,10 @@ public class Simulation {
         creatureNameLookup = Utils.populateNameLookup("src/com/xxdmogxx/creatures/creatureNameLookup.txt");
         creatureLookup = new HashMap<>();
         obstacles = new ArrayList<>();
-        obstacles.add(new Wall(0.4f, 0.2f, 0.2f, 0.3f));
-        obstacles.add(new Wall(0.1f, 0.2f, -0.1f, 0.3f));
-        obstacles.add(new Wall(-0.2f, 0.2f, -0.4f, 0.3f));
+        camera = new Camera();
+//        obstacles.add(new Wall(0.4f, 0.2f, 0.2f, 0.3f));
+//        obstacles.add(new Wall(0.1f, 0.2f, -0.1f, 0.3f));
+//        obstacles.add(new Wall(-0.2f, 0.2f, -0.4f, 0.3f));
     }
 
     public void init() throws Exception {
@@ -38,10 +41,11 @@ public class Simulation {
     }
 
     public void input() {
+
     }
 
     public void update() {
-        popManager.update(obstacles);
+        popManager.update(camera, obstacles);
     }
 
     public void render() {

@@ -1,6 +1,6 @@
 package com.xxdmogxx.core.engine;
 
-import com.xxdmogxx.core.render.WindowManager;
+import com.xxdmogxx.core.render.Window;
 import com.xxdmogxx.core.utils.Constants;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -13,7 +13,7 @@ public class EngineManager {
 
     private long timer;
     private boolean isRunning;
-    private WindowManager window;
+    private Window window;
     private GLFWErrorCallback errorCallback;
     private Simulation sim;
 

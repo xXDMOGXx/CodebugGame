@@ -1,6 +1,5 @@
 package com.xxdmogxx.core.render.components;
 
-import com.xxdmogxx.core.render.buffers.IBO;
 import com.xxdmogxx.core.render.buffers.VAO;
 import com.xxdmogxx.core.render.buffers.VBO;
 import com.xxdmogxx.core.utils.Constants;
@@ -9,7 +8,7 @@ import org.lwjgl.opengl.GL20;
 
 import java.util.ArrayList;
 
-public class Group {
+public class KeyframeGroup {
 
     public float[] translations;
     public float[] rotations;
@@ -23,13 +22,13 @@ public class Group {
     private final VBO rotationBuffer;
     private final VBO tweenBuffer;
     private final VBO maxTweenBuffer;
-    private final VBO scaleBuffer;
+    private final VBO camBuffer;
 
     private int bufferSize = 0;
 
     private final int NUM_EXTRA_ATTRIBUTES = 6;
 
-    public Group(AnimationHolder holder, int startKeyframeIndex, int endKeyframeIndex, int maxTiming) throws Exception {
+    public KeyframeGroup(AnimationHolder holder, int startKeyframeIndex, int endKeyframeIndex, int maxTiming) throws Exception {
         translations = new float[0];
         rotations = new float[0];
         tweens = new float[0];
@@ -43,14 +42,14 @@ public class Group {
         rotationBuffer = new VBO();
         tweenBuffer = new VBO();
         maxTweenBuffer = new VBO(new float[]{maxTiming});
-        scaleBuffer = new VBO(Constants.scale);
+        camBuffer = new VBO();
 
         model.link(vertexArray);
         translationBuffer.link(vertexArray, 2, 2, 1);
         rotationBuffer.link(vertexArray, 3, 1, 1);
         tweenBuffer.link(vertexArray, 4, 1, 1);
         maxTweenBuffer.link(vertexArray, 5, 1, bufferSize);
-        scaleBuffer.link(vertexArray, 6, 1, bufferSize);
+        camBuffer.link(vertexArray, 6, 3, bufferSize);
 
         vertexArray.unbind();
         model.unlink();
@@ -96,9 +95,17 @@ public class Group {
             bufferSize = creatures.size();
             bind();
             maxTweenBuffer.link(vertexArray, 5, 1, bufferSize);
-            scaleBuffer.link(vertexArray, 6, 1, bufferSize);
+            camBuffer.link(vertexArray, 6, 3, bufferSize);
             unbind();
         }
+    }
+
+    public void setCamPos(float[] pos) {
+        camBuffer.set(pos);
+    }
+
+    public void updateCamPos(float[] pos) {
+        camBuffer.update(pos);
     }
 
     private void enableAttributes() {
@@ -126,13 +133,13 @@ public class Group {
     }
 
     public void delete() {
-        vertexArray.delete();;
+        vertexArray.delete();
         model.delete();
         translationBuffer.delete();
         rotationBuffer.delete();
         tweenBuffer.delete();
         maxTweenBuffer.delete();
-        scaleBuffer.delete();
+        camBuffer.delete();
         shader.delete();
     }
 

@@ -81,12 +81,4 @@ public class VBO {
     public void delete() {
         GL30.glDeleteBuffers(ID);
     }
-
-    public int getID() {
-        return ID;
-    }
-
-    public int getSize() {
-        return size;
-    }
 }

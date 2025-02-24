@@ -1,52 +1,38 @@
 package com.xxdmogxx.creatures;
 
-import com.xxdmogxx.core.render.components.Group;
+import com.xxdmogxx.core.render.components.KeyframeGroup;
 import com.xxdmogxx.core.utils.Constants;
 import com.xxdmogxx.structures.Wall;
 
 import java.util.ArrayList;
 
 public class Creature {
-    private int id;
-    private int index;
+    private final int id;
     public final float[] position;
     private final float[] velocity = new float[]{0.0f, 0.0f};
     public float rotation;
     private float targetRotation;
-    private float size;
 
-    private float moveSpeed = 0.01f;
+    private float moveSpeed = 0.02f;
     private float rotateSpeed = 0.3f;
 
     private boolean recentlyCollided = false;
 
     public String anim;
-    public Group group;
+    public KeyframeGroup group;
     public int frameCounter = 0;
     public int timingCounter = 0;
 
-    public Creature(int id, int index) {
+    public Creature(int id) {
         this.id = id;
-        this.index = index;
         position = new float[]{0.0f, 0.0f};
         rotation = 0.0f;
-        size = 0.1f;
     }
 
-    public Creature(int id, int index, float[] position, float rotation) {
+    public Creature(int id, float[] position, float rotation) {
         this.id = id;
-        this.index = index;
         this.position = position;
         this.rotation = rotation;
-        size = 0.1f;
-    }
-
-    public Creature(int id, int index, float[] position, float rotation, float size) {
-        this.id = id;
-        this.index = index;
-        this.position = position;
-        this.rotation = rotation;
-        this.size = size;
     }
 
     public void setAnimation(String animationName) {
@@ -97,7 +83,7 @@ public class Creature {
     }
 
     private void checkCollisions(ArrayList<Wall> obstacles) {
-        if ((position[0] >= 1 || position[0] <= -1) || (position[1] >= 1 || position[1] <= -1)) {
+        if ((position[0] >= 10 || position[0] <= -10) || (position[1] >= 10 || position[1] <= -10)) {
             float newDir = (float) Math.atan2(-position[1], -position[0]);
             setTarget(newDir);
             recentlyCollided = true;
@@ -122,9 +108,5 @@ public class Creature {
         if (Math.min(Constants.FLOAT_TAU - distance, distance) < rotateSpeed) rotation = targetRotation;
         else if (mod < Constants.FLOAT_PI) rotation -= rotateSpeed;
         else if (mod >= Constants.FLOAT_PI) rotation += rotateSpeed;
-    }
-
-    public int getIndex() {
-        return index;
     }
 }

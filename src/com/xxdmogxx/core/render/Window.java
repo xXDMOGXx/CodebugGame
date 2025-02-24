@@ -1,5 +1,6 @@
 package com.xxdmogxx.core.render;
 
+import com.xxdmogxx.core.engine.Launcher;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
@@ -12,7 +13,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-public class WindowManager {
+public class Window {
 
     // The window handle
     private long window;
@@ -21,11 +22,20 @@ public class WindowManager {
     private final int height;
     private final boolean vSync;
 
-    public WindowManager(CharSequence title, int width, int height, boolean vSync) {
+    private boolean dragPressed;
+    private double lastMouseX;
+    private double lastMouseY;
+    private double[] mouseX;
+    private double[] mouseY;
+
+    public Window(CharSequence title, int width, int height, boolean vSync) {
         this.title = title;
         this.width = width;
         this.height = height;
         this.vSync = vSync;
+        dragPressed = false;
+        mouseX = new double[1];
+        mouseY = new double[1];
     }
 
     public void init() {
@@ -72,9 +82,44 @@ public class WindowManager {
     }
 
     private void setKeyCallback() {
-        // Setup a key callback. It will be called every time a key is pressed, repeated or released.
+        // Setup an input callback. It will be called every time a key is pressed, repeated or released.
         glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-            // Place any key callbacks here
+        });
+    }
+
+    private void setMouseButtonCallback() {
+        // Setup an input callback. It will be called every time a mouse button is pressed or released.
+        glfwSetMouseButtonCallback(window, (window, button, action, mods) -> {
+            if (action == GLFW_PRESS) {
+                if (button == GLFW_MOUSE_BUTTON_RIGHT) {
+                    glfwGetCursorPos(window, mouseX, mouseY);
+                    lastMouseX = mouseX[0];
+                    lastMouseY = mouseY[0];
+                    dragPressed = true;
+                }
+            } else if (action == GLFW_RELEASE) {
+                if (button == GLFW_MOUSE_BUTTON_RIGHT) {
+                    dragPressed = false;
+                }
+            }
+        });
+    }
+
+    private void setMouseMovementCallback() {
+        // Setup an input callback. It will be called every time the mouse is moved onscreen.
+        glfwSetCursorPosCallback(window, (window, xPos, yPos) -> {
+            if (dragPressed) {
+                Launcher.getSim().camera.move((float) (xPos - lastMouseX), (float) (yPos - lastMouseY));
+                lastMouseX = xPos;
+                lastMouseY = yPos;
+            }
+        });
+    }
+
+    private void setMouseScrollCallback() {
+        // Setup an input callback. It will be called every time the mouse wheel is scrolled.
+        glfwSetScrollCallback(window, (window, xOffset, yOffset) -> {
+            Launcher.getSim().camera.changeZoom((float) (yOffset/50));
         });
     }
 
@@ -85,6 +130,9 @@ public class WindowManager {
         if (window == NULL) throw new RuntimeException("Failed to create the GLFW window");
 
         setKeyCallback();
+        setMouseButtonCallback();
+        setMouseMovementCallback();
+        setMouseScrollCallback();
 
         // Get the thread stack and push a new frame
         try ( MemoryStack stack = stackPush() ) {
@@ -131,5 +179,13 @@ public class WindowManager {
         // Free the window callbacks and destroy the window
         glfwFreeCallbacks(window);
         glfwDestroyWindow(window);
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }

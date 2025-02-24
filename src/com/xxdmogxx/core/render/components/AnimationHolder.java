@@ -3,7 +3,6 @@ package com.xxdmogxx.core.render.components;
 import com.xxdmogxx.core.render.RenderManager;
 import com.xxdmogxx.core.utils.Utils;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class AnimationHolder {
@@ -11,7 +10,7 @@ public class AnimationHolder {
     public float[][] vertices;
     public int[] indices;
     public final int[] timings;
-    public final Group[] keyframes;
+    public final KeyframeGroup[] keyframes;
     public int numKeyframes;
 
     public AnimationHolder(String animPath) throws Exception {
@@ -27,38 +26,46 @@ public class AnimationHolder {
         // Queries the lookup for timing data, and condenses it into a list
         // Also creates a KeyframeGroup for every forward pair of keyframes (including wrap around)
         timings = new int[numKeyframes];
-        keyframes = new Group[numKeyframes];
+        keyframes = new KeyframeGroup[numKeyframes];
         for (int i = 0; i < numKeyframes; i++) {
             timings[i] = dataLookup.get("keyframeTiming" + i);
 
-            Group keyframe;
+            KeyframeGroup keyframe;
             // Does the wrap around check
-            if (i == numKeyframes - 1) { keyframe = new Group(this, i, 0, timings[i]);
-            } else { keyframe = new Group(this, i, i + 1, timings[i]); }
+            if (i == numKeyframes - 1) { keyframe = new KeyframeGroup(this, i, 0, timings[i]);
+            } else { keyframe = new KeyframeGroup(this, i, i + 1, timings[i]); }
 
             keyframes[i] = keyframe;
         }
     }
 
-    public void updateTransformations() {
-        for (Group keyframe : keyframes) { keyframe.updateArrays(); }
+    public void updateArrays() {
+        for (KeyframeGroup keyframe : keyframes) { keyframe.updateArrays(); }
     }
 
     public void setBuffers() {
-        for (Group keyframe : keyframes) { keyframe.setBuffers(); }
+        for (KeyframeGroup keyframe : keyframes) { keyframe.setBuffers(); }
     }
 
     public void updateBuffers() {
-        for (Group keyframe : keyframes) { keyframe.updateBuffers(); }
+        for (KeyframeGroup keyframe : keyframes) { keyframe.updateBuffers(); }
+    }
+
+    public void setCamPos(float[] pos) {
+        for (KeyframeGroup keyframe : keyframes) { keyframe.setCamPos(pos); }
+    }
+
+    public void updateCamPos(float[] pos) {
+        for (KeyframeGroup keyframe : keyframes) { keyframe.updateCamPos(pos); }
     }
 
     public void render(RenderManager renderer) {
-        for (Group keyframe : keyframes) {
+        for (KeyframeGroup keyframe : keyframes) {
             if (!keyframe.creatures.isEmpty()) { renderer.render(keyframe); }
         }
     }
 
     public void delete() {
-        for (Group keyframe : keyframes) { keyframe.delete(); }
+        for (KeyframeGroup keyframe : keyframes) { keyframe.delete(); }
     }
 }
