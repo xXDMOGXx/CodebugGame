@@ -70,9 +70,9 @@ public class KeyframeGroup {
             tweens = new float[creatures.size()];
         }
         for (int i = 0; i < creatures.size(); i++) {
-            translations[i*2] = creatures.get(i).position[0];
-            translations[i*2+1] = creatures.get(i).position[1];
-            rotations[i] = creatures.get(i).rotation;
+            translations[i*2] = creatures.get(i).position.x;
+            translations[i*2+1] = creatures.get(i).position.y;
+            rotations[i] = creatures.get(i).rotation * 60;
             tweens[i] = creatures.get(i).timingCounter;
         }
     }

@@ -9,7 +9,7 @@ public class Launcher {
     private static Simulation sim;
     private static EngineManager engine;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         // Creates the window
         window = new Window(Constants.TITLE, Constants.WIDTH, Constants.HEIGHT, Constants.VSYNC);
         // Creates the main game file

@@ -7,11 +7,13 @@ public class Constants {
     public static final boolean VSYNC = false;
     public static final int FPS_TARGET = 60;
     public static final int UPS_TARGET = 20;
-    public static final int numAnts = 10;
+    public static final int numAnts = 1;
     public static final float FLOAT_PI = (float) Math.PI;
     public static final float FLOAT_TAU = (float) Math.TAU;
 
     public  static final String DEFAULT_STATIC_VERT_SHADER = "src/com/xxdmogxx/creatures/ant/base/shaders/baseAntStatic.vert";
     public  static final String DEFAULT_ANIM_VERT_SHADER = "src/com/xxdmogxx/creatures/ant/base/shaders/baseAntAnim.vert";
     public  static final String DEFAULT_FRAG_SHADER = "src/com/xxdmogxx/creatures/ant/base/shaders/baseAnt.frag";
+    public  static final String DEFAULT_CHUNK_VERT_SHADER = "src/com/xxdmogxx/resources/chunk.vert";
+    public  static final String DEFAULT_CHUNK_FRAG_SHADER = "src/com/xxdmogxx/resources/chunk.frag";
 }

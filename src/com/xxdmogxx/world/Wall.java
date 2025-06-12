@@ -1,4 +1,4 @@
-package com.xxdmogxx.structures;
+package com.xxdmogxx.world;
 
 public class Wall {
     public float top;

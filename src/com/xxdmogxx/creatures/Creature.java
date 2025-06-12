@@ -2,34 +2,31 @@ package com.xxdmogxx.creatures;
 
 import com.xxdmogxx.core.render.components.KeyframeGroup;
 import com.xxdmogxx.core.utils.Constants;
-import com.xxdmogxx.structures.Wall;
+import com.xxdmogxx.world.Map;
+import com.xxdmogxx.world.Tile;
+import com.xxdmogxx.world.Wall;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Creature {
     private final int id;
-    public final float[] position;
-    private final float[] velocity = new float[]{0.0f, 0.0f};
-    public float rotation;
-    private float targetRotation;
-
-    private float moveSpeed = 0.02f;
-    private float rotateSpeed = 0.3f;
-
-    private boolean recentlyCollided = false;
+    public final Point position;
+    public byte rotation;
 
     public String anim;
     public KeyframeGroup group;
     public int frameCounter = 0;
     public int timingCounter = 0;
 
+    public int cooldown = 0;
+
     public Creature(int id) {
         this.id = id;
-        position = new float[]{0.0f, 0.0f};
-        rotation = 0.0f;
+        position = new Point(0, 0);
     }
 
-    public Creature(int id, float[] position, float rotation) {
+    public Creature(int id, Point position, byte rotation) {
         this.id = id;
         this.position = position;
         this.rotation = rotation;
@@ -40,73 +37,30 @@ public class Creature {
         frameCounter = 0;
     }
 
-    public void setTarget(float direction) {
-        lookAt(direction);
-        float x = (float) (moveSpeed * Math.cos(direction));
-        float y = (float) (moveSpeed * Math.sin(direction));
-        setVelocity(x, y);
+    public void update(Map map) {
+        if (cooldown <= 0) { decideAction(map);
+        } else { cooldown--; }
     }
 
-    public void setTarget(float x, float y) {
-
-    }
-
-    public void lookAt(float newRotation) {
-        if (newRotation < 0) newRotation += Constants.FLOAT_TAU;
-        else if (newRotation >= Constants.FLOAT_TAU) newRotation -= Constants.FLOAT_TAU;
-        targetRotation = (float) (newRotation - Math.PI/2);
-    }
-
-    public void snapRotationToTarget() {
-        rotation = targetRotation;
-    }
-
-    public void setVelocity(float x, float y) {
-        velocity[0] = x;
-        velocity[1] = y;
-    }
-
-    public void update(ArrayList<Wall> obstacles) {
-        decideTarget();
-        checkCollisions(obstacles);
-
-        rotateTowardsTarget();
-        position[0] += velocity[0];
-        position[1] += velocity[1];
-    }
-
-    private void decideTarget() {
-        if (recentlyCollided) {
-            setTarget((float) (Math.random() * 2 * Math.PI));
-            recentlyCollided = false;
-        }
-    }
-
-    private void checkCollisions(ArrayList<Wall> obstacles) {
-        if ((position[0] >= 10 || position[0] <= -10) || (position[1] >= 10 || position[1] <= -10)) {
-            float newDir = (float) Math.atan2(-position[1], -position[0]);
-            setTarget(newDir);
-            recentlyCollided = true;
+    private void decideAction(Map map) {
+        Tile adjacentTile = map.getAdjacentTile(position, rotation);
+        if (adjacentTile.isEmpty()) {
+            adjacentTile.setCreature(this);
+            map.findTile(position.x, position.y).setCreature(null);
+            switch (rotation) {
+                case 0 -> position.move(1, 0);
+                case 1 -> position.move(1, 1);
+                case 2 -> position.move(0, 1);
+                case 3 -> position.move(-1, 0);
+                case 4 -> position.move(-1, -1);
+                case 5 -> position.move(0, -1);
+            }
         } else {
-            for (Wall obstacle : obstacles) {
-                if (position[0] >= obstacle.left && position[0] <= obstacle.right) {
-                    if (position[1] >= obstacle.bottom && position[1] <= obstacle.top) {
-                        setVelocity(-velocity[0], -velocity[1]);
-                        recentlyCollided = true;
-                    }
-                }
+            byte oldRotation = rotation;
+            while (rotation == oldRotation) {
+                this.rotation = (byte) Math.round(Math.random() * 6);
             }
         }
-    }
-
-    private void rotateTowardsTarget() {
-        if (rotation < 0) rotation += Constants.FLOAT_TAU;
-        else if (rotation >= Constants.FLOAT_TAU) rotation -= Constants.FLOAT_TAU;
-
-        double mod = (rotation - targetRotation + Constants.FLOAT_TAU) % Constants.FLOAT_TAU;
-        float distance = Math.abs(rotation - targetRotation);
-        if (Math.min(Constants.FLOAT_TAU - distance, distance) < rotateSpeed) rotation = targetRotation;
-        else if (mod < Constants.FLOAT_PI) rotation -= rotateSpeed;
-        else if (mod >= Constants.FLOAT_PI) rotation += rotateSpeed;
+        cooldown = 10;
     }
 }

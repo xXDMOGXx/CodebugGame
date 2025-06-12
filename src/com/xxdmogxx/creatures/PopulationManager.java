@@ -5,8 +5,10 @@ import com.xxdmogxx.core.render.RenderManager;
 import com.xxdmogxx.core.render.components.AnimationHolder;
 import com.xxdmogxx.core.render.components.KeyframeGroup;
 import com.xxdmogxx.core.utils.Utils;
-import com.xxdmogxx.structures.Wall;
+import com.xxdmogxx.world.Map;
+import com.xxdmogxx.world.Wall;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -17,9 +19,9 @@ public class PopulationManager {
     HashMap<String, AnimationHolder> animHolderLookup;
     ArrayList<String> anims;
 
-    private int index = 0;
+    private Point location;
 
-    public PopulationManager(String creatureName, int initialSize, HashMap<String, HashMap<String, String>> creatureNameLookup, HashMap<Integer, Creature> creatureLookup) throws Exception {
+    public PopulationManager(String creatureName, HashMap<String, HashMap<String, String>> creatureNameLookup, HashMap<Integer, Creature> creatureLookup) throws Exception {
         this.creatureLookup = creatureLookup;
         creatures = new ArrayList<>();
         animHolderLookup = new HashMap<>();
@@ -32,33 +34,15 @@ public class PopulationManager {
 
 
         for (String anim : anims) { animHolderLookup.get(anim).setCamPos(new float[]{0.0f, 0.0f, 0.0f}); }
-        spawn(initialSize);
     }
 
-    public void advanceAnims() {
-        for (Creature creature : creatures) {
-            creature.timingCounter++;
-            // Checks whether the creature is finished with the current animation keyframe
-            if (creature.timingCounter >= animHolderLookup.get(creature.anim).timings[creature.frameCounter]) {
-                creature.timingCounter = 0;
-                // Remove creature from current KeyframeGroup
-                animHolderLookup.get(creature.anim).keyframes[creature.frameCounter].creatures.remove(creature);
-                creature.frameCounter++;
-                // If the creature reaches the end of the animation, loop it back to the start
-                if (creature.frameCounter >= animHolderLookup.get(creature.anim).numKeyframes) {
-                    creature.frameCounter = 0;
-                }
-                // Link the creature with its new group
-                KeyframeGroup newGroup = animHolderLookup.get(creature.anim).keyframes[creature.frameCounter];
-                newGroup.creatures.add(creature);
-                creature.group = newGroup;
-            }
-        }
+    public void setLocation(Point coords) {
+        location = coords;
     }
 
-    public void update(Camera camera, ArrayList<Wall> obstacles) {
+    public void update(Camera camera, Map map) {
         for (Creature creature : creatures) {
-            creature.update(obstacles);
+            creature.update(map);
 
             AnimationHolder currentHolder = animHolderLookup.get(creature.anim);
             creature.timingCounter++;
@@ -98,8 +82,6 @@ public class PopulationManager {
             creatures.add(creature);
             creatureLookup.put(id, creature);
 
-            creature.setTarget((float) (Math.random() * 2 * Math.PI));
-            creature.snapRotationToTarget();
             creature.timingCounter = (int) (Math.random() * 10);
             creature.frameCounter = (int) Math.round(Math.random());
 
@@ -108,7 +90,7 @@ public class PopulationManager {
             group.creatures.add(creature);
             creature.group = group;
 
-            index++;
+            creature.position.setLocation(location);
         }
         setBuffers();
     }

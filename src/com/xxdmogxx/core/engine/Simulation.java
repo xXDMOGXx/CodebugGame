@@ -7,8 +7,10 @@ import com.xxdmogxx.core.utils.Constants;
 import com.xxdmogxx.core.utils.Utils;
 import com.xxdmogxx.creatures.Creature;
 import com.xxdmogxx.creatures.PopulationManager;
-import com.xxdmogxx.structures.Wall;
+import com.xxdmogxx.world.Map;
+import com.xxdmogxx.world.Wall;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -17,27 +19,35 @@ public class Simulation {
     private final RenderManager renderer;
     private final Window window;
     private PopulationManager popManager;
-    private final ArrayList<Wall> obstacles;
+    public final Map map;
     public final Camera camera;
 
     private final HashMap<String, HashMap<String, String>> creatureNameLookup;
     private final HashMap<Integer, Creature> creatureLookup;
 
-    public Simulation() {
+    public Simulation() throws Exception {
         renderer = new RenderManager();
         window = Launcher.getWindow();
         creatureNameLookup = Utils.populateNameLookup("src/com/xxdmogxx/creatures/creatureNameLookup.txt");
         creatureLookup = new HashMap<>();
-        obstacles = new ArrayList<>();
+        map = new Map();
         camera = new Camera();
-//        obstacles.add(new Wall(0.4f, 0.2f, 0.2f, 0.3f));
-//        obstacles.add(new Wall(0.1f, 0.2f, -0.1f, 0.3f));
-//        obstacles.add(new Wall(-0.2f, 0.2f, -0.4f, 0.3f));
     }
 
     public void init() throws Exception {
         window.setClearColor(1, 1, 1, 1);
-        popManager = new PopulationManager("baseAnt", Constants.numAnts, creatureNameLookup, creatureLookup);
+        map.loadChunk(-1, -1);
+        map.loadChunk(-1, 0);
+        map.loadChunk(-1, 1);
+        map.loadChunk(0, -1);
+        map.loadChunk(0, 0);
+        map.loadChunk(0, 1);
+        map.loadChunk(1, -1);
+        map.loadChunk(1, 0);
+        map.loadChunk(1, 1);
+        popManager = new PopulationManager("baseAnt", creatureNameLookup, creatureLookup);
+        popManager.setLocation(new Point(0, 0));
+        popManager.spawn(Constants.numAnts);
     }
 
     public void input() {
@@ -45,10 +55,11 @@ public class Simulation {
     }
 
     public void update() {
-        popManager.update(camera, obstacles);
+        popManager.update(camera, map);
     }
 
     public void render() {
+        //renderer.render(map.chunkGroup);
         popManager.render(renderer);
     }
 

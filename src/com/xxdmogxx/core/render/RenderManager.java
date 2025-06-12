@@ -1,7 +1,9 @@
 package com.xxdmogxx.core.render;
 
 import com.xxdmogxx.core.engine.Launcher;
+import com.xxdmogxx.core.render.components.ChunkGroup;
 import com.xxdmogxx.core.render.components.KeyframeGroup;
+import com.xxdmogxx.world.Map;
 import org.lwjgl.opengl.GL31;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -21,6 +23,12 @@ public class RenderManager {
     public void render(KeyframeGroup group) {
         group.enable();
         GL31.glDrawElementsInstanced(GL_TRIANGLES, group.getIndexCount(), GL_UNSIGNED_INT, 0, group.getBufferSize());
+        group.disable();
+    }
+
+    public void render(ChunkGroup group) {
+        group.enable();
+        GL31.glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, group.getBufferSize());
         group.disable();
     }
 

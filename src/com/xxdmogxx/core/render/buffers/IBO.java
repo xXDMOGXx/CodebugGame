@@ -15,7 +15,7 @@ public class IBO {
     public IBO() {
         // Generate an IBO and get its reference id
         ID = GL15.glGenBuffers();
-        // Store the array of indices into an int buffer in memory
+        // Initialize an empty IntBuffer to prevent it from being null
         buffer = MemoryUtil.memAllocInt(0);
     }
 
